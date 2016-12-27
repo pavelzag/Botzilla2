@@ -25,15 +25,14 @@ def main():
 
     while True:
         try:
-            echo(bot)
+            worker(bot)
         except NetworkError:
             sleep(1)
         except Unauthorized:
-            # The user has removed or blocked the bot.
             update_id += 1
 
 
-def echo(bot):
+def worker(bot):
     global update_id
     for update in bot.getUpdates(offset=update_id, timeout=10):
         requested_user_name, requested_status, requested_assigned_to, requested_component = \
@@ -55,12 +54,12 @@ def echo(bot):
         else:
             amtstring = ' are '
         if not isinstance(bugs_messages_to_send, str):
+            bot.sendMessage(chat_id=update.message.chat_id, text='There' + amtstring + str(num_of_bugs) +
+                                                                 ' ' + requested_status.lower() + ' bugs')
             for bug in bugs_messages_to_send:
-                bot.sendMessage(chat_id=update.message.chat_id, text='There' + amtstring + str(num_of_bugs) +
-                                                                     ' ' + requested_status.lower() + ' bugs')
-                bot.sendMessage(chat_id=update.message.chat_id, text=bug)
+                    bot.sendMessage(chat_id=update.message.chat_id, text=bug)
         else:
-            bot.sendMessage(chat_id=update.message.chat_id, text='Badly formatted request. Please try again')
+            bot.sendMessage(chat_id=update.message.chat_id, text=bugs_messages_to_send)
         update_id = update.update_id + 1
 
 

@@ -23,7 +23,6 @@ def query_builder(**kwargs):
 
 def extract_params(updates, type):
     full_text_string = updates['message']['text']
-    # full_text_string = updates['result'][0]['message']['text']
     if type == 'user':
         full_text_string = full_text_string.lower()
     params_list = re.findall(r'(\w+)\s*:\s*((?:\w+\b\s*)+)(?!\s*:)', full_text_string)
@@ -73,13 +72,6 @@ def extract_assigned_to(updates):
     except IndexError:
         return default_status
     return cut_string.upper()
-
-    # full_text_string = updates['result'][0]['message']['text']
-    # try:
-    #     cut_string = full_text_string.split("assigned:", 1)[1]
-    # except IndexError:
-    #     return ''
-    # return cut_string
 
 
 def query_params(updates):
